@@ -1,12 +1,25 @@
-meme_dict = {
-            "КРИНЖ": "Что-то очень странное или стыдное",
-            "ЛОЛ": "Что-то очень смешное",
-            "РОФЛ": "Шутка"
-            }
+import discord
 
-word = input("Введите непонятное слово (большими буквами!): ")
+intents = discord.Intents.default()
+intents.message_content = True
 
-if word in meme_dict.keys():
-    print(meme_dict[word])
-else:
-    print("У нас пока нет этого слова... Но мы над этим работаем!!!!!")
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.content.startswith('$hello'):
+        await message.channel.send(f'Привет! Я бот {client.user}!')
+    elif  message.content.startswith('$heh'):
+        if len(message.content) > 4:
+            count_heh = int(message.content[4:])
+        else:
+            count_heh = 5
+        await message.channel.send("he" * count_heh)
+        
+client.run("ТУТ СЕКРЕТНЫЙ ТОКЕН")
